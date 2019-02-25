@@ -43,8 +43,7 @@ NATIVE_CXX_LOADED = False
 current_path = dirname(realpath(__file__))
 cxx_flag_path = join(current_path, "use_cxx.flag")
 if not isfile(cxx_flag_path):
-    RPObject.global_error("CORE", "Could not find cxx flag, please run the setup.py!")
-    sys.exit(1)
+    NATIVE_CXX_LOADED = True
 else:
     with open(join(current_path, "use_cxx.flag"), "r") as handle:
         NATIVE_CXX_LOADED = handle.read().strip() == "1"

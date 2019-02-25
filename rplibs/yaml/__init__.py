@@ -11,13 +11,17 @@ import collections
 from direct.stdpy.file import open
 from rpcore.rpobject import RPObject
 
-# Import different PyYaml versions depending on the used python version
-if sys.version_info < (3, 0):
-    from .yaml_py2 import load as yaml_load
-    from .yaml_py2 import YAMLError, SafeLoader
-else:
-    from .yaml_py3 import load as yaml_load
-    from .yaml_py3 import YAMLError, SafeLoader
+try:
+    from yaml import load as yaml_load
+    from yaml import YAMLError, SafeLoader
+except ImportError:
+    # Import different PyYaml versions depending on the used python version
+    if sys.version_info < (3, 0):
+        from .yaml_py2 import load as yaml_load
+        from .yaml_py2 import YAMLError, SafeLoader
+    else:
+        from .yaml_py3 import load as yaml_load
+        from .yaml_py3 import YAMLError, SafeLoader
 
 __all__ = ["load_yaml_file", "load_yaml_file_flat"]
 

@@ -60,13 +60,15 @@ def parse_cmd_args():
     parser.add_argument(
         "--clean", help="Clean rebuild of the native modules", action="store_true")
     parser.add_argument(
-        "--verbose", help="Output additional debug information", action="store_true")
+        "-v", "--verbose", help="Output additional debug information", action="store_true")
     parser.add_argument(
         "--skip-update", help="Skip updating the module builder to avoid overriding changes", action="store_true")
     parser.add_argument(
         "--skip-native", help="Skip native module compilation", action="store_true")
     parser.add_argument(
         "--ci-build", help="Skip setup steps requiring gpu drivers, only for travis ci", action="store_true")
+    parser.add_argument(
+        "cmd", nargs=argparse.REMAINDER, help="If given, invokes a setuptools command with this name.")
     return parser.parse_args()
 
 CMD_ARGS = parse_cmd_args()
@@ -309,4 +311,18 @@ def setup():
 
 
 if __name__ == "__main__":
-    setup()
+    if CMD_ARGS.cmd:
+        from setuptools import setup, find_packages
+        setup(package_data={
+            'rpcore': [
+                'gui/data/*.png',
+                'gui/data/*.txo.pz',
+                'gui/data/*.ico',
+                'shader/*.glsl',
+                'shader/ibl/*.glsl',
+                'shader/includes/*.glsl',
+                'shader/templates/*.glsl',
+            ],
+        })
+    else:
+        setup()
